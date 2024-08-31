@@ -21,8 +21,8 @@ The GCAE framework is implemented to explore the impact of incorporating geodesi
 The following datasets are used in this study, with corresponding data loading and preprocessing scripts available in the `datasets` folder:
 
 - **Synthetic Data**: Includes 3D Swiss Roll and S-Curve datasets.
-- **MNIST**: Handwritten digits dataset.
-- **12-Newsgroups**: A collection of approximately 20,000 newsgroup documents, partitioned across 20 different newsgroups.
+- **MNIST**: 70,000 images of handwritten digits (0-9).
+- **12-Newsgroups**: A collection of approximately 11,308 documents, partitioned across 12 different newsgroups.
 
 ## Models
 
@@ -122,7 +122,7 @@ plt.show()
 ```
 
 ## Dependencies
-To run this notebook, the following specific versions of Python libraries are required:
+This project was developed using Python 3.11.9. Additionally, the following Python libraries are required:
 - faiss-cpu	1.8.0
 - matplotlib 3.7.3
 - memory-profiler 0.61.0

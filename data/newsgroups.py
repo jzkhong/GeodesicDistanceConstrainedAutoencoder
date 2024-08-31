@@ -124,5 +124,5 @@ def load_newsgroups_data():
     
     return X_train_scaled, X_test_scaled, y_train, y_test, labels_name
 
-# Example usage
-X_train_scaled, X_test_scaled, y_train, y_test, labels_name = load_newsgroups_data()
+# # Example usage
+# X_train_scaled, X_test_scaled, y_train, y_test, labels_name = load_newsgroups_data()

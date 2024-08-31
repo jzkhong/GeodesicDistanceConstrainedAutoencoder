@@ -55,6 +55,6 @@ def visualize_mnist_samples(x_train, y_train, num_samples=20):
     
     plt.show()
 
-# Example usage
-x_train_flat, x_test_flat, x_train_non_flat, x_test_non_flat, y_train, y_test = load_mnist_data(normalize=True)
-visualize_mnist_samples(x_train_non_flat, y_train, num_samples=20)
+# # Example usage
+# x_train_flat, x_test_flat, x_train_non_flat, x_test_non_flat, y_train, y_test = load_mnist_data(normalize=True)
+# visualize_mnist_samples(x_train_non_flat, y_train, num_samples=20)
