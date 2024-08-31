@@ -64,10 +64,10 @@ def plot_3d(points, points_color, title, cmap=plt.cm.viridis):
     plt.tight_layout()
     plt.show()
 
-# Example usage for Swiss Roll dataset
-x_swiss_scaled, x_test_swiss_scaled, y_swiss, y_test_swiss = load_synthetic_data('swiss_roll', n_samples=4000, noise=0.1, test_size=0.2, seed=seed)
-plot_3d(x_swiss_scaled, y_swiss, 'Original Swiss Roll Dataset', cmap=plt.cm.jet)
+# # Example usage for Swiss Roll dataset
+# x_swiss_scaled, x_test_swiss_scaled, y_swiss, y_test_swiss = load_synthetic_data('swiss_roll', n_samples=4000, noise=0.1, test_size=0.2, seed=seed)
+# plot_3d(x_swiss_scaled, y_swiss, 'Swiss Roll Dataset', cmap=plt.cm.jet)
 
-# Example usage for S-Curve dataset
-x_s_scaled, x_test_s_scaled, y_s, y_test_s = load_synthetic_data('s_curve', n_samples=4000, noise=0.1, test_size=0.2, seed=seed)
-plot_3d(x_s_scaled, y_s, 'S-Curve Dataset', cmap=plt.cm.viridis)
+# # Example usage for S-Curve dataset
+# x_s_scaled, x_test_s_scaled, y_s, y_test_s = load_synthetic_data('s_curve', n_samples=4000, noise=0.1, test_size=0.2, seed=seed)
+# plot_3d(x_s_scaled, y_s, 'S-Curve Dataset', cmap=plt.cm.viridis)

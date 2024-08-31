@@ -21,9 +21,9 @@ def memory_usage_psutil():
     return mem
 
 # Import the autoencoder creation functions from the respective .py files
-from dense_autoencoder import get_dense_autoencoder
-from cnn_autoencoder import get_cnn_autoencoder
-from text_autoencoder import get_text_autoencoder
+from models.dense_autoencoder import get_dense_autoencoder
+from models.cnn_autoencoder import get_cnn_autoencoder
+from models.text_autoencoder import get_text_autoencoder
 
 class GCAETrainer(Model):
     """
@@ -37,6 +37,7 @@ class GCAETrainer(Model):
         self.model_type = model_type  # Attribute to select architecture
         self.n_neighbors = n_neighbors
         self.alpha = alpha
+        self.seed = seed
         self.gcae = self.get_autoencoder()  # Autoencoder based on model_type
         self.encoder = self.gcae.get_layer(f'{self.dataset}_encoder')
 
@@ -52,17 +53,17 @@ class GCAETrainer(Model):
         self.reconstruction_loss_metric = Mean(name='reconstruction_loss')
         self.geodesic_loss_metric = Mean(name='geodesic_loss')
 
-    def get_autoencoder(self, seed=5):
+    def get_autoencoder(self):
         """
         Returns the selected autoencoder based on the model type.
         """
         if self.model_type == "dense":
-            return get_dense_autoencoder(self.input_dim, self.embedding_dim, self.dataset, seed=seed)
+            return get_dense_autoencoder(self.input_dim, self.embedding_dim, self.dataset, seed=self.seed)
         elif self.model_type == "cnn":
             input_shape = (28, 28, 1)  # Example input shape for MNIST-like data
-            return get_cnn_autoencoder(input_shape=input_shape, encoded_dim=self.embedding_dim, dataset=self.dataset, seed=seed)
+            return get_cnn_autoencoder(input_shape=input_shape, encoded_dim=self.embedding_dim, dataset=self.dataset, seed=self.seed)
         elif self.model_type == "text":
-            return get_text_autoencoder(self.input_dim, self.embedding_dim, self.dataset, seed=seed)
+            return get_text_autoencoder(self.input_dim, self.embedding_dim, self.dataset, seed=self.seed)
         else:
             raise ValueError(f"Unknown model type: {self.model_type}")
 

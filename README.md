@@ -8,7 +8,7 @@ This repository contains the code implementation for the Geodesic Distance Const
   - [Introduction](#introduction)
   - [Datasets](#datasets)
   - [Models](#models)
-  - [Usage](#usage)
+  - [Example Usage](#example-usage)
   - [Dependencies](#dependencies)
   - [Code License](#code-license)
 
@@ -33,45 +33,110 @@ The models implemented in this project include:
 - **Text Autoencoder**: Used for 12-Newsgroups data - implemented in `text_autoencoder.py`.
 - **Geodesic Distance Constrained Autoencoder (GCAE)**: An advanced autoencoder that incorporates geodesic distance constraints to better capture the data's intrinsic geometry - implemented in `gcae.py`.
 
-## Usage
+## Example Usage
 
-To use the code in this repository, you can directly run the specific dataset and model scripts:
+To use the Geodesic Distance Constrained Autoencoder (GCAE) with a specific dataset, you can use the following example:
 
-- For synthetic datasets:
-  ```bash
-  python datasets/synthetic_data.py
-  python models/dense_autoencoder.py
-  python models/gcae.py
-  ```
-- For MNIST datasets:
-  ```bash
-    python datasets/mnist.py
-    python models/cnn_autoencoder.py
-    python models/gcae.py
-  ```
+```python
+# Import necessary modules
+import numpy as numpy
+import matplotlib.pyplot as plt
+import tensorflow as tf
+from tensorflow.keras.callbacks import EarlyStopping
+from datasets.synthetic_data import load_synthetic_data
+from models.dense_autoencoder import get_dense_autoencoder
+from models.gcae import GCAETrainer
 
-- For 12-Newsgroups datasets:
-  ```bash
-    python datasets/newsgroups.py
-    python models/text_autoencoder.py
-    python models/gcae.py
-  ```
+# Set seed
+seed = 42
+
+# Load dataset
+X_train, X_test, y_train, y_test = load_synthetic_data('swiss_roll', n_samples=4000, noise=0.1, test_size=0.2, seed=seed)
+
+# Load the autoencoder model
+input_dim = 3
+encoded_dim = 2 
+dataset = "swiss_roll"
+dense_autoencoder = get_dense_autoencoder(input_dim, encoded_dim, dataset)
+
+# Instantiate the GCAETrainer with the dense autoencoder
+trainer = GCAETrainer(
+    model_type="dense",
+    dataset=dataset,
+    input_dim=input_dim,
+    embedding_dim=encoded_dim,
+    n_neighbors=7,
+    alpha=10,
+    seed=5
+)
+
+# Generate Geodesic distance matrix for train and validation data
+train_geo_dist = trainer.compute_geodesic_distances(X_train, training=True)
+val_geo_dist = trainer.compute_geodesic_distances(X_test, training=False)
+
+# Convert data to TensorFlow Dataset
+batch_size = 16
+train_dataset = tf.data.Dataset.from_tensor_slices((X_train.astype(np.float32), np.arange(len(X_train))))
+train_dataset = train_dataset.batch(batch_size)
+val_dataset = tf.data.Dataset.from_tensor_slices((X_test.astype(np.float32), np.arange(len(X_test))))
+val_dataset = val_dataset.batch(batch_size)
+
+# Create an EarlyStopping callback to terminate training if the validation total loss doesn't immprove after 10 epochs
+early_stopping = EarlyStopping(monitor='val_total_loss', patience=10, mode='min', restore_best_weights=True)
+
+# Compile and train the model
+trainer.compile(optimizer='adam')
+history = trainer.fit(train_dataset, epochs=100, validation_data=val_dataset, callbacks=early_stopping)
+
+# Print final training and validation loss (MSE)
+final_train_loss = history.history['total_loss'][-1]
+final_val_loss = history.history['val_total_loss'][-1]
+print(f"Final Training Loss: {final_train_loss:.4f}, Final Validation Loss: {final_val_loss:.4f}")
+
+# Examine the training and validation loss over epochs
+plt.figure(figsize=(20,4))
+plt.subplot(1,3,1)
+plt.plot(history.history['total_loss'], label='train')
+plt.plot(history.history['val_total_loss'], label='val')
+plt.xlabel("Epoch")
+plt.ylabel("Total Loss (MSE + Geodesic Loss)")
+plt.title("Total Loss vs epoch")
+plt.legend()
+
+plt.subplot(1,3,2)
+plt.plot(history.history['reconstruction_loss'], label='train')
+plt.plot(history.history['val_total_loss'], label='val')
+plt.xlabel("Epoch")
+plt.ylabel("Loss (MSE)")
+plt.title("Reconstruction Loss vs epoch")
+plt.legend()
+
+plt.subplot(1,3,3)
+plt.plot(history.history['geodesic_loss'], label='train')
+plt.plot(history.history['val_total_loss'], label='val')
+plt.xlabel("Epoch")
+plt.ylabel("Geodesic Loss")
+plt.title("Geodesic Loss vs epoch")
+plt.legend()
+plt.show()
+```
 
 ## Dependencies
 To run this notebook, the following specific versions of Python libraries are required:
 - faiss-cpu	1.8.0
-- matplotlib	3.7.3
+- matplotlib 3.7.3
+- memory-profiler 0.61.0
 - nltk	3.8.1
 - numba	0.60.0
 - numpy	1.26.4
 - scikit-learn	1.5.0
 - scipy	1.13.1
 - sentence-transformers	3.0.1
-- tensorflow	2.14.1
-- tensorflow-datasets	4.9.4
+- tensorflow 2.14.1
+- tensorflow-datasets 4.9.4
 - torch	2.4.0
 
-These can be installed via pip using the command `pip install faiss-cpu==1.8.0 matplotlib==3.7.3 nltk==3.8.1 numba==0.60.0 numpy==1.26.4 scikit-learn==1.5.0 scipy==1.13.1 sentence-transformers==3.0.1 tensorflow==2.14.1 tensorflow-datasets==4.9.4 torch==2.4.0`.
+These can be installed via pip using the command `pip install faiss-cpu==1.8.0 matplotlib==3.7.3 memory-profiler==0.61.0 nltk==3.8.1 numba==0.60.0 numpy==1.26.4 scikit-learn==1.5.0 scipy==1.13.1 sentence-transformers==3.0.1 tensorflow==2.14.1 tensorflow-datasets==4.9.4 torch==2.4.0`.
 
 ## Code License
 
