@@ -1,6 +1,6 @@
 # Geodesic Distance Constrained Autoencoder (GCAE)
 
-This repository contains the code implementation for the Geodesic Distance Constrained Autoencoder (GCAE) developed as part of a UK MSc research project. The GCAE is designed to incorporate geodesic distances within the latent space of autoencoders to preserve the intrinsic geometry of the data.
+This repository contains the code implementation for the Geodesic Distance Constrained Autoencoder (GCAE) developed as part of a MSc research project. The GCAE is designed to incorporate geodesic distances within the latent space of autoencoders to preserve the intrinsic geometry of the data.
 
 ## Table of Contents
 - [Geodesic Distance Constrained Autoencoder (GCAE)](#geodesic-distance-constrained-autoencoder-gcae)
