@@ -11,7 +11,7 @@ from nltk.tokenize import word_tokenize
 nltk.download('punkt')
 
 
-def fetch_newsgroups_data(selected_categories=None):
+def fetch_newsgroups_data():
     """
     Fetch the 12-Newsgroups data for the selected categories.
     
@@ -21,21 +21,20 @@ def fetch_newsgroups_data(selected_categories=None):
     Returns:
     tuple: (text, labels, labels_name)
     """
-    if selected_categories is None:
-        selected_categories = [
-            'comp.graphics',
-            'comp.os.ms-windows.misc',
-            'comp.sys.ibm.pc.hardware',
-            'comp.sys.mac.hardware',
-            'sci.crypt',
-            'sci.electronics',
-            'sci.med',
-            'sci.space',
-            'talk.politics.guns',
-            'talk.politics.mideast',
-            'talk.religion.misc',
-            'misc.forsale'
-        ]
+    selected_categories = [
+        'comp.graphics',
+        'comp.os.ms-windows.misc',
+        'comp.sys.ibm.pc.hardware',
+        'comp.sys.mac.hardware',
+        'sci.crypt',
+        'sci.electronics',
+        'sci.med',
+        'sci.space',
+        'talk.politics.guns',
+        'talk.politics.mideast',
+        'talk.religion.misc',
+        'misc.forsale'
+    ]
 
     newsgroups_data = datasets.fetch_20newsgroups(subset='all', categories=selected_categories, remove=('headers', 'footers'), random_state=1)
     return newsgroups_data.data, newsgroups_data.target, newsgroups_data.target_names
@@ -52,9 +51,10 @@ def preprocess_text(text, stop_words=ENGLISH_STOP_WORDS):
     Returns:
     str: Preprocessed text.
     """
-    text = re.sub(r'\n', ' ', text.lower())
+    text = re.sub("'\n", " ", text.lower())
     tokens = word_tokenize(text)
-    tokens = [token for token in tokens if token.isalpha() and token not in stop_words]
+    tokens = [token for token in tokens if token.isalpha() 
+              and token not in stop_words]
     return ' '.join(tokens)
 
 
@@ -78,7 +78,7 @@ def preprocess_and_embed_text(text_data, model_name='all-MiniLM-L6-v2', device='
     return embeddings.cpu().numpy()
 
 
-def split_and_scale_data(X, y, test_size=0.1, random_state=7, stratify=True):
+def split_and_scale_data(X, y, test_size=0.1):
     """
     Split the data into train and test sets and apply standard scaling.
     
@@ -92,8 +92,7 @@ def split_and_scale_data(X, y, test_size=0.1, random_state=7, stratify=True):
     Returns:
     tuple: Scaled training and testing data.
     """
-    stratify = y if stratify else None
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state, stratify=stratify)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42, stratify=y)
     
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
