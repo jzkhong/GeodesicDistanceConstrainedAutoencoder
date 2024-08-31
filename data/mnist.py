@@ -3,12 +3,9 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
-def load_mnist_data(normalize=True):
+def load_mnist_data():
     """
     Load and preprocess the MNIST dataset.
-
-    Parameters:
-    normalize (bool): Whether to normalize the pixel values to the range [0, 1].
 
     Returns:
     Tuple of arrays: (x_train_flat, x_test_flat, x_train_non_flat, x_test_non_flat, y_train, y_test)
@@ -16,10 +13,9 @@ def load_mnist_data(normalize=True):
     # Load the MNIST dataset
     (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
 
-    # Normalize pixel values to the range [0, 1] if specified
-    if normalize:
-        x_train = x_train / 255.0
-        x_test = x_test / 255.0
+    # Normalize pixel values to the range [0, 1]
+    x_train = x_train / 255.0
+    x_test = x_test / 255.0
 
     # Reshape the images into vectors of size 784 for methods like PCA, Isomap, and t-SNE
     x_train_flat = x_train.reshape(-1, 784)
@@ -36,9 +32,9 @@ def load_mnist_data(normalize=True):
 
     return x_train_flat, x_test_flat, x_train_non_flat, x_test_non_flat, y_train, y_test
 
-def visualize_mnist_samples(x_train, y_train, num_samples=20):
+def visualise_mnist_samples(x_train, y_train, num_samples=20):
     """
-    Visualize a sample of images from the MNIST dataset.
+    Visualise a sample of images from the MNIST dataset.
 
     Parameters:
     x_train (ndarray): Training images (non-flattened).
@@ -56,5 +52,5 @@ def visualize_mnist_samples(x_train, y_train, num_samples=20):
     plt.show()
 
 # # Example usage
-# x_train_flat, x_test_flat, x_train_non_flat, x_test_non_flat, y_train, y_test = load_mnist_data(normalize=True)
-# visualize_mnist_samples(x_train_non_flat, y_train, num_samples=20)
+# x_train_flat, x_test_flat, x_train_non_flat, x_test_non_flat, y_train, y_test = load_mnist_data()
+# visualise_mnist_samples(x_train_non_flat, y_train, num_samples=20)

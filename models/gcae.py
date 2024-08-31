@@ -39,7 +39,10 @@ class GCAETrainer(Model):
         self.alpha = alpha
         self.seed = seed
         self.gcae = self.get_autoencoder()  # Autoencoder based on model_type
-        self.encoder = self.gcae.get_layer(f'{self.dataset}_encoder')
+        if self.dataset == "mnist":
+            self.encoder = self.gcae.get_layer(f'{self.dataset}_cnn_encoder')
+        else:
+            self.encoder = self.gcae.get_layer(f'{self.dataset}_encoder')
 
         # FAISS index and training data
         self.faiss_index = None
