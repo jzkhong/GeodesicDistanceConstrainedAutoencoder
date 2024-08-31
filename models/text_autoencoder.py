@@ -3,7 +3,7 @@ from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.models import Model
 from tensorflow.keras.initializers import GlorotUniform
 
-def get_encoder(input_dim, encoded_dim, dataset, seed=7):
+def get_text_encoder(input_dim, encoded_dim, dataset, seed=7):
     """
     Define the encoder part of an autoencoder.
     
@@ -24,7 +24,7 @@ def get_encoder(input_dim, encoded_dim, dataset, seed=7):
     encoder = Model(inputs, encoded, name=f'{dataset}_encoder')
     return encoder
 
-def get_decoder(input_dim, encoded_dim, dataset, seed=7):
+def get_text_decoder(input_dim, encoded_dim, dataset, seed=7):
     """
     Define the decoder part of an autoencoder.
     
@@ -45,7 +45,7 @@ def get_decoder(input_dim, encoded_dim, dataset, seed=7):
     decoder = Model(encoded_inputs, decoded, name=f'{dataset}_decoder')
     return decoder
     
-def get_autoencoder(input_dim, encoded_dim, dataset, seed=7):
+def get_text_autoencoder(input_dim, encoded_dim, dataset, seed=7):
     """
     Construct the complete autoencoder by combining encoder and decoder.
     
@@ -58,8 +58,8 @@ def get_autoencoder(input_dim, encoded_dim, dataset, seed=7):
     Returns:
     Model: Autoencoder model.
     """
-    encoder = get_encoder(input_dim, encoded_dim, dataset, seed=seed)
-    decoder = get_decoder(input_dim, encoded_dim, dataset, seed=seed)
+    encoder = get_text_encoder(input_dim, encoded_dim, dataset, seed=seed)
+    decoder = get_text_decoder(input_dim, encoded_dim, dataset, seed=seed)
     inputs = Input(shape=(input_dim,))
     encoded = encoder(inputs)
     decoded = decoder(encoded)
