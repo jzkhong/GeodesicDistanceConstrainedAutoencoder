@@ -18,7 +18,7 @@ The GCAE framework is implemented to explore the impact of incorporating geodesi
 
 ## Datasets
 
-The following datasets are used in this study, with corresponding data loading and preprocessing scripts available in the `datasets` folder:
+The following datasets are used in this study, with corresponding data loading and preprocessing scripts available in the `data` folder:
 
 - **Synthetic Data**: Includes 3D Swiss Roll and S-Curve datasets.
 - **MNIST**: 70,000 images of handwritten digits (0-9).
