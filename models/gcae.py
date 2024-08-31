@@ -63,8 +63,7 @@ class GCAETrainer(Model):
         if self.model_type == "dense":
             return get_dense_autoencoder(self.input_dim, self.embedding_dim, self.dataset, seed=self.seed)
         elif self.model_type == "cnn":
-            input_shape = (28, 28, 1)  # Example input shape for MNIST-like data
-            return get_cnn_autoencoder(input_shape=input_shape, encoded_dim=self.embedding_dim, dataset=self.dataset, seed=self.seed)
+            return get_cnn_autoencoder(input_shape=self.input_dim, encoded_dim=self.embedding_dim, dataset=self.dataset, seed=self.seed)
         elif self.model_type == "text":
             return get_text_autoencoder(self.input_dim, self.embedding_dim, self.dataset, seed=self.seed)
         else:
