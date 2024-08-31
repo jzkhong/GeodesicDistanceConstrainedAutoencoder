@@ -43,7 +43,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping
-from datasets.synthetic_data import load_synthetic_data
+from data.synthetic_data import load_synthetic_data
 from models.dense_autoencoder import get_dense_autoencoder
 from models.gcae import GCAETrainer
 
