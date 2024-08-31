@@ -39,7 +39,7 @@ To use the Geodesic Distance Constrained Autoencoder (GCAE) with a specific data
 
 ```python
 # Import necessary modules
-import numpy as numpy
+import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping
