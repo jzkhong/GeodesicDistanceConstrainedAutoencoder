@@ -22,8 +22,8 @@ def load_mnist_data():
     x_test_flat = x_test.reshape(-1, 784)
 
     # Keep the non-flattened images for CNNs and other deep learning models
-    x_train_non_flat = x_train.reshape(-1, 28, 28, 1)
-    x_test_non_flat = x_test.reshape(-1, 28, 28, 1)
+    x_train_non_flat = x_train
+    x_test_non_flat = x_test
 
     print("Flattened training matrix shape:", x_train_flat.shape)
     print("Flattened testing matrix shape:", x_test_flat.shape)

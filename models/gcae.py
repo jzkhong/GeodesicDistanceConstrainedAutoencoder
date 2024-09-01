@@ -169,6 +169,8 @@ class GCAETrainer(Model):
         reconstructions = self.gcae(x, training=training)
         latent = self.encoder(x)
         # Compute the reconstruction loss
+        if self.model_type == "cnn":
+            x = tf.expand_dims(x, axis=-1)
         reconstruction_loss = (
             tf.reduce_mean((x - reconstructions) ** 2)
         )
