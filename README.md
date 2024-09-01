@@ -43,39 +43,39 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping
-from data.mnist import load_mnist_data
-from models.cnn_autoencoder import get_cnn_autoencoder
+from data.synthetic_data import load_synthetic_data
+from models.dense_autoencoder import get_dense_autoencoder
 from models.gcae import GCAETrainer
 
 # Set seed
 seed = 42
 
 # Load dataset
-x_train_flat, x_test_flat, X_train, X_test, y_train, y_test = load_mnist_data()
+X_train, X_test, y_train, y_test = load_synthetic_data('swiss_roll', n_samples=4000, noise=0.1, test_size=0.2, seed=seed)
 
 # Load the autoencoder model
-input_dim = (28,28,1)
+input_dim = 3
 encoded_dim = 2 
-dataset = "mnist"
-cnn_autoencoder = get_cnn_autoencoder(input_dim, encoded_dim, dataset)
+dataset = "swiss_roll"
+dense_autoencoder = get_dense_autoencoder(input_dim, encoded_dim, dataset)
 
 # Instantiate the GCAETrainer with the dense autoencoder
 trainer = GCAETrainer(
-    model_type="cnn",
+    model_type="dense",
     dataset=dataset,
     input_dim=input_dim,
     embedding_dim=encoded_dim,
-    n_neighbors=5,
-    alpha=0.005,
-    seed=7
+    n_neighbors=7,
+    alpha=10,
+    seed=5
 )
 
 # Generate Geodesic distance matrix for train and validation data
-train_geo_dist = trainer.compute_geodesic_distances(x_train_flat, training=True)
-val_geo_dist = trainer.compute_geodesic_distances(x_test_flat, training=False)
+train_geo_dist = trainer.compute_geodesic_distances(X_train, training=True)
+val_geo_dist = trainer.compute_geodesic_distances(X_test, training=False)
 
 # Convert data to TensorFlow Dataset
-batch_size = 64
+batch_size = 16
 train_dataset = tf.data.Dataset.from_tensor_slices((X_train.astype(np.float32), np.arange(len(X_train))))
 train_dataset = train_dataset.batch(batch_size)
 val_dataset = tf.data.Dataset.from_tensor_slices((X_test.astype(np.float32), np.arange(len(X_test))))
@@ -105,7 +105,7 @@ plt.legend()
 
 plt.subplot(1,3,2)
 plt.plot(history.history['reconstruction_loss'], label='train')
-plt.plot(history.history['val_total_loss'], label='val')
+plt.plot(history.history['val_reconstruction_loss'], label='val')
 plt.xlabel("Epoch")
 plt.ylabel("Loss (MSE)")
 plt.title("Reconstruction Loss vs epoch")
@@ -113,7 +113,7 @@ plt.legend()
 
 plt.subplot(1,3,3)
 plt.plot(history.history['geodesic_loss'], label='train')
-plt.plot(history.history['val_total_loss'], label='val')
+plt.plot(history.history['val_geodesic_loss'], label='val')
 plt.xlabel("Epoch")
 plt.ylabel("Geodesic Loss")
 plt.title("Geodesic Loss vs epoch")
